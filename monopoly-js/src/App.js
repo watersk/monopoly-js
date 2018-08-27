@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import image from './monopoly_board.jpg';
 import './App.css';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Input from '@material-ui/core/Input';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 
 const SubmitForm = (
   {
@@ -20,12 +21,29 @@ const SubmitForm = (
   </div>
 )
 
+const ListProperties = ({ values }) => (
+  <div>
+    {values.map(function(currentValue, index) {
+      return(<div key={index}>
+        <div>
+          <div>{currentValue.title}</div>
+          <div>{currentValue.colorGroup}</div>
+          <div>{currentValue.cost}</div>
+          <div>{currentValue.rent}</div>
+        </div>
+      </div>)
+    })}
+  </div>
+)
+
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state={
-      dialogOpen: false,
+      playerDialogOpen: false,
+      propDialogOpen: false,
+      isGameReady: false,
       player: {
         name: '',
         bank: '',
@@ -51,21 +69,23 @@ class App extends Component {
     this.handleGameInit = this.handleGameInit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleClickProperties = this.handleClickProperties.bind(this);
   }
 
   handleClickOpen = () => {
     this.setState({
-      dialogOpen: true,
+      playerDialogOpen: true,
     });
   };
 
   handleClose = () => {
     this.setState({
-      dialogOpen: false
+      playerDialogOpen: false,
+      propDialogOpen: false
     });
   };
 
-  handleGameInit = () => {
+  handleGameInit = (e) => {
     const newState = this.state.propertyList;
 
     // all of the properties and their info //
@@ -406,6 +426,8 @@ class App extends Component {
       this.setState({property});
     newState.push({property});
 
+    this.setState({isGameReady: true});
+
     this.setState({
       propertyList: newState,
       property: {
@@ -444,9 +466,17 @@ class App extends Component {
     player.properties = [];
     player.cards = [];
     this.setState({
-      dialogOpen: false,
+      playerDialogOpen: false,
       player
     });
+  }
+
+  handleClickProperties = () => {
+    this.setState(
+      {
+        propDialogOpen: true
+      }
+    );
   }
 
   render() {
@@ -461,7 +491,7 @@ class App extends Component {
             <Button variant="outlined" onClick={this.handleClickOpen}>Start</Button> :
             <Button variant="outlined" onClick={this.handleGameInit}>Go</Button>
           }
-          <Dialog open={this.state.dialogOpen} onClose={this.handleClose}>
+          <Dialog open={this.state.playerDialogOpen} onClose={this.handleClose}>
             <div style={{padding: '50px'}}>
               <SubmitForm
                 handleFormSubmit={this.handleFormSubmit}
@@ -472,7 +502,27 @@ class App extends Component {
             </div>
           </Dialog>
         </div>
-      </div>
+        <div>
+          { (!(this.state.player.name === '') && (this.state.isGameReady)) ?
+            <Button variant="outlined" onClick={this.handleClickProperties}>See Properties</Button> :
+            <div />
+          }
+        </div>
+        <div>
+        { (this.state.isGameReady === false) ?
+          <div /> :
+          <div>
+            <Dialog open={this.state.propDialogOpen} onClose={this.handleClose}>
+              <Card raised={true}>
+                <CardContent>
+                  Test.
+                </CardContent>
+              </Card>
+            </Dialog>
+          </div>
+        }
+        </div>
+        </div>
     );
   }
 }

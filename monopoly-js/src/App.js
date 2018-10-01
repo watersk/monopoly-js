@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, version } from 'react';
 import image from './monopoly_board.jpg';
 import './App.css';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Input from '@material-ui/core/Input';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Paper from '@material-ui/core/Paper';
 
 const SubmitForm = (
   {
@@ -21,17 +25,25 @@ const SubmitForm = (
   </div>
 )
 
-const ListProperties = ({ values }) => (
+const ListProperties = ({ PropertyList }) => (
   <div>
-    {values.map(function(currentValue, index) {
-      return(<div key={index}>
-        <div>
-          <div>{currentValue.title}</div>
-          <div>{currentValue.colorGroup}</div>
-          <div>{currentValue.cost}</div>
-          <div>{currentValue.rent}</div>
-        </div>
-      </div>)
+    {PropertyList.map((property, index) => {
+      return(
+        <ExpansionPanel key={index}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography variant="headline">{property.title}</Typography>
+          </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Paper square={true}><b>Color Group:</b> {property.colorGroup}</Paper>
+              <Paper square={true}><b>Cost:</b> ${property.cost}</Paper>
+              <Paper square={true}><b>Rent:</b> ${property.rent}</Paper>
+              <Paper square={true}><b>House Cost:</b> ${property.houseCost}</Paper>
+              <Paper square={true}><b>Hotel Cost:</b> ${property.hotelCost} + 4 houses</Paper>
+              <Paper square={true}><b>Mortgage:</b> ${property.mortgageValue}</Paper>
+              <Paper square={true}><b>Available?</b> {property.isOwned === false ? "Yes" : "No"}</Paper>
+            </ExpansionPanelDetails>
+        </ExpansionPanel>
+      )
     })}
   </div>
 )
@@ -85,363 +97,322 @@ class App extends Component {
     });
   };
 
-  handleGameInit = (e) => {
-    const newState = this.state.propertyList;
-
-    // all of the properties and their info //
-    let property = Object.assign({}, this.state.property);
-      property.title = 'Mediterranean Ave';
-      property.colorGroup = 'purple';
-      property.cost = 60;
-      property.rent = 2;
-      property.mortgageValue = 30;
-      property.houseCost = 50;
-      property.hotelCost = 50;
-      property.isOwned = false;
-      property.isMortgaged = false;
-    this.setState({property});
-    newState.push({property});
-    
-      property.title = 'Baltic Ave';
-      property.colorGroup = 'purple';
-      property.cost = 60;
-      property.rent = 4;
-      property.mortgageValue = 30;
-      property.houseCost = 50;
-      property.hotelCost = 50;
-      property.isOwned = false;
-      property.isMortgaged = false;
-    this.setState({property});
-    newState.push({property});
-
-      property.title = 'Reading Railroad';
-      property.colorGroup = 'railroad';
-      property.cost = 200;
-      property.rent = 0;
-      property.mortgageValue = 100;
-      property.houseCost = 0;
-      property.hotelCost = 0;
-      property.isOwned = false;
-      property.isMortgaged = false;
-    this.setState({property});
-    newState.push({property});
-
-      property.title = 'Oriental Ave';
-      property.colorGroup = 'light blue';
-      property.cost = 100;
-      property.rent = 6;
-      property.mortgageValue = 50;
-      property.houseCost = 50;
-      property.hotelCost = 50;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Vermont Ave';
-      property.colorGroup = 'light blue';
-      property.cost = 100;
-      property.rent = 6;
-      property.mortgageValue = 50;
-      property.houseCost = 50;
-      property.hotelCost = 50;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Connecticut Ave';
-      property.colorGroup = 'light blue';
-      property.cost = 120;
-      property.rent = 8;
-      property.mortgageValue = 60;
-      property.houseCost = 50;
-      property.hotelCost = 50;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'St. Charles Place';
-      property.colorGroup = 'pink';
-      property.cost = 140;
-      property.rent = 10;
-      property.mortgageValue = 70;
-      property.houseCost = 100;
-      property.hotelCost = 100;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Electric Company';
-      property.colorGroup = 'utilities';
-      property.cost = 150;
-      property.rent = 0;
-      property.mortgageValue = 75;
-      property.houseCost = 0;
-      property.hotelCost = 0;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'States Ave';
-      property.colorGroup = 'pink';
-      property.cost = 140;
-      property.rent = 10;
-      property.mortgageValue = 70;
-      property.houseCost = 100;
-      property.hotelCost = 100;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Virginia Ave';
-      property.colorGroup = 'pink';
-      property.cost = 160;
-      property.rent = 12;
-      property.mortgageValue = 80;
-      property.houseCost = 100;
-      property.hotelCost = 100;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Pennsylvania Railroad';
-      property.colorGroup = 'railroad';
-      property.cost = 200;
-      property.rent = 0;
-      property.mortgageValue = 100;
-      property.houseCost = 0;
-      property.hotelCost = 0;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'St. James Place';
-      property.colorGroup = 'orange';
-      property.cost = 180;
-      property.rent = 14;
-      property.mortgageValue = 90;
-      property.houseCost = 100;
-      property.hotelCost = 100;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Tennessee Ave';
-      property.colorGroup = 'orange';
-      property.cost = 180;
-      property.rent = 14;
-      property.mortgageValue = 90;
-      property.houseCost = 100;
-      property.hotelCost = 100;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'New York Ave';
-      property.colorGroup = 'orange';
-      property.cost = 200;
-      property.rent = 16;
-      property.mortgageValue = 100;
-      property.houseCost = 100;
-      property.hotelCost = 100;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Kentucky Ave';
-      property.colorGroup = 'red';
-      property.cost = 220;
-      property.rent = 18;
-      property.mortgageValue = 110;
-      property.houseCost = 150;
-      property.hotelCost = 150;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Indiana Ave';
-      property.colorGroup = 'red';
-      property.cost = 220;
-      property.rent = 18;
-      property.mortgageValue = 110;
-      property.houseCost = 150;
-      property.hotelCost = 150;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Illinois Ave';
-      property.colorGroup = 'red';
-      property.cost = 240;
-      property.rent = 20;
-      property.mortgageValue = 120;
-      property.houseCost = 150;
-      property.hotelCost = 150;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'B & O Railroad';
-      property.colorGroup = 'railroad';
-      property.cost = 200;
-      property.rent = 0;
-      property.mortgageValue = 100;
-      property.houseCost = 0;
-      property.hotelCost = 0;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Atlantic Ave';
-      property.colorGroup = 'yellow';
-      property.cost = 260;
-      property.rent = 22;
-      property.mortgageValue = 130;
-      property.houseCost = 150;
-      property.hotelCost = 150;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Ventnor Ave';
-      property.colorGroup = 'yellow';
-      property.cost = 260;
-      property.rent = 22;
-      property.mortgageValue = 130;
-      property.houseCost = 150;
-      property.hotelCost = 150;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Water Works';
-      property.colorGroup = 'utilities';
-      property.cost = 150;
-      property.rent = 0;
-      property.mortgageValue = 75;
-      property.houseCost = 0;
-      property.hotelCost = 0;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Marvin Gardens';
-      property.colorGroup = 'yellow';
-      property.cost = 280;
-      property.rent = 24;
-      property.mortgageValue = 24;
-      property.houseCost = 150;
-      property.hotelCost = 150;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Pacific Ave';
-      property.colorGroup = 'green';
-      property.cost = 300;
-      property.rent = 26;
-      property.mortgageValue = 150;
-      property.houseCost = 200;
-      property.hotelCost = 200;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'North Carolina Ave';
-      property.colorGroup = 'green';
-      property.cost = 300;
-      property.rent = 26;
-      property.mortgageValue = 150;
-      property.houseCost = 200;
-      property.hotelCost = 200;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Pennsylvania Ave';
-      property.colorGroup = 'green';
-      property.cost = 320;
-      property.rent = 28;
-      property.mortgageValue = 160;
-      property.houseCost = 200;
-      property.hotelCost = 200;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Short Line Railroad';
-      property.colorGroup = 'railroad';
-      property.cost = 200;
-      property.rent = 0;
-      property.mortgageValue = 100;
-      property.houseCost = 0;
-      property.hotelCost = 0;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Park Place';
-      property.colorGroup = 'blue';
-      property.cost = 350;
-      property.rent = 35;
-      property.mortgageValue = 175;
-      property.houseCost = 200;
-      property.hotelCost = 200;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-      property.title = 'Boardwalk';
-      property.colorGroup = 'blue';
-      property.cost = 400;
-      property.rent = 50;
-      property.mortgageValue = 200;
-      property.houseCost = 200;
-      property.hotelCost = 200;
-      property.isOwned = false;
-      property.isMortgaged = false;
-      this.setState({property});
-    newState.push({property});
-
-    this.setState({isGameReady: true});
-
-    this.setState({
-      propertyList: newState,
-      property: {
-        title: '',
-        colorGroup: '',
-        cost: '',
-        rent: '',
-        mortgageValue: '',
-        houseCost: '',
-        hotelCost: '',
+  handleGameInit = () => {
+    const newPropertyList = [
+      {
+        title: 'Mediterranean Ave',
+        colorGroup: 'purple',
+        cost: 60,
+        rent: 2,
+        mortgageValue: 30,
+        houseCost: 50,
+        hotelCost: 50,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Baltic Ave',
+        colorGroup: 'purple',
+        cost: 60,
+        rent: 4,
+        mortgageValue: 30,
+        houseCost: 50,
+        hotelCost: 50,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Reading Railroad',
+        colorGroup: 'railroad',
+        cost: 200,
+        rent: 0,
+        mortgageValue: 100,
+        houseCost: 0,
+        hotelCost: 0,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Oriental Ave',
+        colorGroup: 'light blue',
+        cost: 100,
+        rent: 6,
+        mortgageValue: 50,
+        houseCost: 50,
+        hotelCost: 50,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Vermont Ave',
+        colorGroup: 'light blue',
+        cost: 100,
+        rent: 6,
+        mortgageValue: 50,
+        houseCost: 50,
+        hotelCost: 50,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Connecticut Ave',
+        colorGroup: 'light blue',
+        cost: 120,
+        rent: 8,
+        mortgageValue: 60,
+        houseCost: 50,
+        hotelCost: 50,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'St. Charles Place',
+        colorGroup: 'pink',
+        cost: 140,
+        rent: 10,
+        mortgageValue: 70,
+        houseCost: 100,
+        hotelCost: 100,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Electric Company',
+        colorGroup: 'utilities',
+        cost: 150,
+        rent: 0,
+        mortgageValue: 75,
+        houseCost: 0,
+        hotelCost: 0,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'States Ave',
+        colorGroup: 'pink',
+        cost: 140,
+        rent: 10,
+        mortgageValue: 70,
+        houseCost: 100,
+        hotelCost: 100,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Virginia Ave',
+        colorGroup: 'pink',
+        cost: 160,
+        rent: 12,
+        mortgageValue: 80,
+        houseCost: 100,
+        hotelCost: 100,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Pennsylvania Railroad',
+        colorGroup: 'railroad',
+        cost: 200,
+        rent: 0,
+        mortgageValue: 100,
+        houseCost: 0,
+        hotelCost: 0,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'St. James Place',
+        colorGroup: 'orange',
+        cost: 180,
+        rent: 14,
+        mortgageValue: 90,
+        houseCost: 100,
+        hotelCost: 100,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Tennessee Ave',
+        colorGroup: 'orange',
+        cost: 180,
+        rent: 14,
+        mortgageValue: 90,
+        houseCost: 100,
+        hotelCost: 100,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'New York Ave',
+        colorGroup: 'orange',
+        cost: 200,
+        rent: 16,
+        mortgageValue: 100,
+        houseCost: 100,
+        hotelCost: 100,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Kentucky Ave',
+        colorGroup: 'red',
+        cost: 220,
+        rent: 18,
+        mortgageValue: 110,
+        houseCost: 150,
+        hotelCost: 150,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Indiana Ave',
+        colorGroup: 'red',
+        cost: 220,
+        rent: 18,
+        mortgageValue: 110,
+        houseCost: 150,
+        hotelCost: 150,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Illinois Ave',
+        colorGroup: 'red',
+        cost: 240,
+        rent: 20,
+        mortgageValue: 120,
+        houseCost: 150,
+        hotelCost: 150,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'B & O Railroad',
+        colorGroup: 'railroad',
+        cost: 200,
+        rent: 0,
+        mortgageValue: 100,
+        houseCost: 0,
+        hotelCost: 0,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Atlantic Ave',
+        colorGroup: 'yellow',
+        cost: 260,
+        rent: 22,
+        mortgageValue: 130,
+        houseCost: 150,
+        hotelCost: 150,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Ventnor Ave',
+        colorGroup: 'yellow',
+        cost: 260,
+        rent: 22,
+        mortgageValue: 130,
+        houseCost: 150,
+        hotelCost: 150,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Water Works',
+        colorGroup: 'utilities',
+        cost: 150,
+        rent: 0,
+        mortgageValue: 75,
+        houseCost: 0,
+        hotelCost: 0,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Marvin Gardens',
+        colorGroup: 'yellow',
+        cost: 280,
+        rent: 24,
+        mortgageValue: 140,
+        houseCost: 150,
+        hotelCost: 150,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Pacific Ave',
+        colorGroup: 'green',
+        cost: 300,
+        rent: 26,
+        mortgageValue: 150,
+        houseCost: 200,
+        hotelCost: 200,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'North Carolina Ave',
+        colorGroup: 'green',
+        cost: 300,
+        rent: 26,
+        mortgageValue: 150,
+        houseCost: 200,
+        hotelCost: 200,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Pennsylvania Ave',
+        colorGroup: 'green',
+        cost: 320,
+        rent: 28,
+        mortgageValue: 160,
+        houseCost: 200,
+        hotelCost: 200,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Short Line Railroad',
+        colorGroup: 'railroad',
+        cost: 200,
+        rent: 0,
+        mortgageValue: 100,
+        houseCost: 0,
+        hotelCost: 0,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Park Place',
+        colorGroup: 'blue',
+        cost: 350,
+        rent: 35,
+        mortgageValue: 175,
+        houseCost: 200,
+        hotelCost: 200,
+        isOwned: false,
+        isMortgaged: false
+      },
+      {
+        title: 'Boardwalk',
+        colorGroup: 'blue',
+        cost: 400,
+        rent: 50,
+        mortgageValue: 200,
+        houseCost: 200,
+        hotelCost: 200,
         isOwned: false,
         isMortgaged: false
       }
-    })
+    ];
+
+    this.setState({
+      propertyList: newPropertyList,
+      isGameReady: true
+    });
 
   }
 
@@ -480,9 +451,11 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state.propertyList);
     return (
       <div className="App">
         <header>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
           <img src={image} alt="Monopoly Board" />
           <h1 className="App-title">Monopoly-JS</h1>
         </header>
@@ -502,25 +475,13 @@ class App extends Component {
             </div>
           </Dialog>
         </div>
+        <br />
+        <br />
         <div>
           { (!(this.state.player.name === '') && (this.state.isGameReady)) ?
-            <Button variant="outlined" onClick={this.handleClickProperties}>See Properties</Button> :
+            <ListProperties PropertyList={this.state.propertyList}/> :
             <div />
           }
-        </div>
-        <div>
-        { (this.state.isGameReady === false) ?
-          <div /> :
-          <div>
-            <Dialog open={this.state.propDialogOpen} onClose={this.handleClose}>
-              <Card raised={true}>
-                <CardContent>
-                  Test.
-                </CardContent>
-              </Card>
-            </Dialog>
-          </div>
-        }
         </div>
         </div>
     );

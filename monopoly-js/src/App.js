@@ -895,10 +895,8 @@ class App extends Component {
           <h1 className="App-title">Monopoly-JS</h1>
         </header>
         <div>
-          <Button variant="outlined" onClick={this.handleClickOpen}>Add Player</Button>
-          <br/><br/>
           { (this.state.playerList.length <= 0) ? 
-            <div/>:
+            <Button variant="outlined" onClick={this.handleClickOpen}>Add Player</Button> :
             <div style={{ paddingLeft: '25%', paddingRight: '25%' }}>
               <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -907,6 +905,7 @@ class App extends Component {
                 <ExpansionPanelDetails>
                   <ListPlayers PlayerList={this.state.playerList} />
                 </ExpansionPanelDetails>
+                <Button variant="outlined" onClick={this.handleClickOpen} style={{ marginBottom: '5%' }}>Add Player</Button>
               </ExpansionPanel>
               <br /><br />
               <Button variant="outlined" onClick={this.handleGameInit}>Go</Button>

@@ -59,6 +59,8 @@ const ListPlayers = ({ PlayerList }) => (
             <div><b>Name:</b> {player.name}</div>
             <div><b>Current Bank:</b> {player.bank}</div>
             <div><b>Number of Properties Owned:</b> {player.properties.length}</div>
+            <br/><br/>
+            <div><b>Current Location:</b> {player.currentLocation}</div>
           </CardContent>
         </Card>
       )
@@ -77,6 +79,7 @@ class App extends Component {
       player: {
         name: '',
         bank: '',
+        currentLocation: '',
         properties: [],
         cards: [],
       },
@@ -93,13 +96,6 @@ class App extends Component {
       },
       propertyList: [],
       playerList: [],
-      boardCard: {
-        cardText: '',
-        cardType: '',
-        amountInvolved: '',
-        propertyLoc: '',
-        canBeSaved: false
-      },
       communityCards: [],
       chanceCards: []
     };
@@ -111,6 +107,20 @@ class App extends Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.handleClickProperties = this.handleClickProperties.bind(this);
     this.handleClickRoll = this.handleClickRoll.bind(this);
+    this.initializePlayerLocation = this.initializePlayerLocation.bind(this);
+  }
+
+  initializePlayerLocation(playerList, boardArr) {
+    const newPlayerList = playerList;
+
+    var i;
+    for (i=0; i<newPlayerList.length; i++) {
+      newPlayerList[i].currentLocation = boardArr[0].title;
+    }
+
+    this.setState({
+      playerList: newPlayerList
+    });
   }
 
   handleClickOpen = () => {
@@ -800,6 +810,8 @@ class App extends Component {
       },
     ];
 
+    this.initializePlayerLocation(this.state.playerList, newPropertyList);
+
     this.setState({
       propertyList: newPropertyList,
       isGameReady: true,
@@ -863,6 +875,7 @@ class App extends Component {
       <div className="App">
       {console.log(this.state.chanceCards)}
       {console.log(this.state.communityCards)}
+      {console.log(this.state.playerList)}
         <header>
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
           <img src={image} alt="Monopoly Board" />

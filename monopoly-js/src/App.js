@@ -13,9 +13,10 @@ import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 
+//SubmitForm component for player creation
 const SubmitForm = (
   {
-    handleFormSubmit, playerName, handleNameChange, labelName, tokenList
+    handleFormSubmit, handleNameChange, labelName
   }
 ) => (
   <CardContent style={{ border: '0px' }}>
@@ -27,6 +28,7 @@ const SubmitForm = (
   </CardContent>
 )
 
+//ListProperties component to display all information for all properties
 const ListProperties = ({ PropertyList }) => (
   <div>
     {PropertyList.map((property, index) => {
@@ -50,6 +52,7 @@ const ListProperties = ({ PropertyList }) => (
   </div>
 )
 
+// ListPlayers component to generate player info for user to see
 const ListPlayers = ({ PlayerList }) => (
   <div>
     {PlayerList.map((player, index) => {
@@ -58,9 +61,19 @@ const ListPlayers = ({ PlayerList }) => (
           <CardContent style={{ textAlign: 'left' }}>
             <div><b>Name:</b> {player.name}</div>
             <div><b>Current Bank:</b> {player.bank}</div>
-            <div><b>Number of Properties Owned:</b> {player.properties.length}</div>
-            <br/><br/>
-            <div><b>Current Location:</b> {player.currentLocation}</div>
+            <div><b>Number of Properties Owned: </b> {player.properties.length}</div>
+            <br/>
+            { (player.properties.length > 0) ?
+              <ListProperties PropertyList = {player.properties} /> :
+              <div />
+            }
+            <br/>
+            <div><b>Current Location:</b> 
+              { (player.currentLocation === '') ?
+                " Not on the board yet. Click Go to initialize player location." :
+                (" " + player.currentLocation)
+              }
+            </div>
           </CardContent>
         </Card>
       )
@@ -83,23 +96,13 @@ class App extends Component {
         properties: [],
         cards: [],
       },
-      property: {
-        title: '',
-        colorGroup: '',
-        cost: '',
-        rent: '',
-        mortgageValue: '',
-        houseCost: '',
-        hotelCost: '',
-        isOwned: false,
-        isMortgaged: false
-      },
       propertyList: [],
       playerList: [],
       communityCards: [],
       chanceCards: []
     };
 
+    //binding functions
     this.handleClickOpen = this.handleClickOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleGameInit = this.handleGameInit.bind(this);
@@ -110,6 +113,7 @@ class App extends Component {
     this.initializePlayerLocation = this.initializePlayerLocation.bind(this);
   }
 
+  //initialize players locations to go by taking in the player list an the board
   initializePlayerLocation(playerList, boardArr) {
     const newPlayerList = playerList;
 
@@ -123,12 +127,14 @@ class App extends Component {
     });
   }
 
+  //open playerDialog to open form (player generation)
   handleClickOpen = () => {
     this.setState({
       playerDialogOpen: true,
     });
   };
 
+  //close function for all dialogs
   handleClose = () => {
     this.setState({
       playerDialogOpen: false,
@@ -136,6 +142,7 @@ class App extends Component {
     });
   };
 
+  //initialize all basic game info (properties, chance, community chest, players start at go)
   handleGameInit = () => {
     const newPropertyList = [
       {
@@ -821,6 +828,7 @@ class App extends Component {
 
   };
 
+  //update player when user enters a name in the select field
   handleNameChange(e) {
     let player = Object.assign({}, this.state.player);
     player.name = e.target.value;
@@ -830,12 +838,15 @@ class App extends Component {
     this.setState({player});
   };
 
+  //submit form function (when submit is clicked)
   handleFormSubmit() {
+    //Name is a required field
     if (this.state.player.name === '') {
       window.alert("Name is required.");
       return false;
     }
 
+    //update playerList as users are added
     const newPlayerList = this.state.playerList;
 
     let player = Object.assign({}, this.state.player);
@@ -852,6 +863,7 @@ class App extends Component {
     });
   };
 
+  //open up the properties dialog
   handleClickProperties = () => {
     this.setState(
       {
@@ -860,6 +872,7 @@ class App extends Component {
     );
   };
 
+  //roll function - still needs kinks worked out (eventually to move player(s))
   handleClickRoll = () => {
 
     const die1 = Math.floor((Math.random() * ((6-1)+1) + 1));
@@ -905,7 +918,6 @@ class App extends Component {
               <Typography variant="headline" header="h2">Add Player</Typography>
               <SubmitForm
                 handleFormSubmit={this.handleFormSubmit}
-                playerName={this.state.player.name}
                 handleNameChange={this.handleNameChange}
                 labelName="Name"
                 tokenList={this.state.tokenList}

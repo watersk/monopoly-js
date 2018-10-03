@@ -111,6 +111,7 @@ class App extends Component {
     this.handleClickProperties = this.handleClickProperties.bind(this);
     this.handleClickRoll = this.handleClickRoll.bind(this);
     this.initializePlayerLocation = this.initializePlayerLocation.bind(this);
+    this.shuffleDeck = this.shuffleDeck.bind(this);
   }
 
   //initialize players locations to go by taking in the player list an the board
@@ -140,6 +141,20 @@ class App extends Component {
       playerDialogOpen: false,
       propDialogOpen: false
     });
+  };
+
+  shuffleDeck(deck) {
+    const newDeck = deck;
+
+    var newLoc, temp, i;
+    for (i = (deck.length - 1); i > 0; i--) {
+      newLoc = Math.floor(Math.random() * (i + 1));
+      temp = newDeck[i];
+      newDeck[i] = newDeck[newLoc];
+      newDeck[newLoc] = temp;
+    }
+
+    return newDeck;
   };
 
   //initialize all basic game info (properties, chance, community chest, players start at go)
@@ -816,8 +831,11 @@ class App extends Component {
         canBeSaved: false
       },
     ];
-
+    
+    //initialize players to start at Go, shuffle chance/community chest decks
     this.initializePlayerLocation(this.state.playerList, newPropertyList);
+    this.shuffleDeck(newChance);
+    this.shuffleDeck(newCommChest);
 
     this.setState({
       propertyList: newPropertyList,
@@ -886,9 +904,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      {console.log(this.state.chanceCards)}
-      {console.log(this.state.communityCards)}
-      {console.log(this.state.playerList)}
         <header>
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
           <img src={image} alt="Monopoly Board" />

@@ -53,7 +53,7 @@ const ListProperties = ({ PropertyList }) => (
 )
 
 // ListPlayers component to generate player info for user to see
-const ListPlayers = ({ PlayerList }) => (
+const ListPlayers = ({ PlayerList, BoardArr }) => (
   <div>
     {PlayerList.map((player, index) => {
       return(
@@ -71,7 +71,7 @@ const ListPlayers = ({ PlayerList }) => (
             <div><b>Current Location:</b> 
               { (player.currentLocation === '') ?
                 " Not on the board yet. Click Go to initialize player location." :
-                (" " + player.currentLocation)
+                (" " + BoardArr[player.currentLocation].title)
               }
             </div>
           </CardContent>
@@ -96,6 +96,10 @@ class App extends Component {
         properties: [],
         cards: [],
       },
+      die1: '',
+      die2: '',
+      rollTotal: '',
+      doublesCounter: 0,
       propertyList: [],
       playerList: [],
       communityCards: [],
@@ -112,6 +116,8 @@ class App extends Component {
     this.handleClickRoll = this.handleClickRoll.bind(this);
     this.initializePlayerLocation = this.initializePlayerLocation.bind(this);
     this.shuffleDeck = this.shuffleDeck.bind(this);
+    //this.getNewLocation = this.getNewLocation.bind(this);
+    this.endRoll = this.endRoll.bind(this);
   }
 
   //initialize players locations to go by taking in the player list an the board
@@ -120,7 +126,7 @@ class App extends Component {
 
     var i;
     for (i=0; i<newPlayerList.length; i++) {
-      newPlayerList[i].currentLocation = boardArr[0].title;
+      newPlayerList[i].currentLocation = boardArr[0].id;
     }
 
     this.setState({
@@ -161,6 +167,7 @@ class App extends Component {
   handleGameInit = () => {
     const newPropertyList = [
       {
+        id: 0,
         title: 'Go',
         colorGroup: 'corner',
         cost: 0,
@@ -172,6 +179,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 1,
         title: 'Mediterranean Ave',
         colorGroup: 'purple',
         cost: 60,
@@ -183,6 +191,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 2,
         title: 'Community Chest',
         colorGroup: 'community chest',
         cost: 0,
@@ -194,6 +203,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 3,
         title: 'Baltic Ave',
         colorGroup: 'purple',
         cost: 60,
@@ -205,6 +215,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 4,
         title: 'Income Tax',
         colorGroup: 'tax',
         cost: 0,
@@ -216,6 +227,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 5,
         title: 'Reading Railroad',
         colorGroup: 'railroad',
         cost: 200,
@@ -227,6 +239,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 6,
         title: 'Oriental Ave',
         colorGroup: 'light blue',
         cost: 100,
@@ -238,6 +251,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 7,
         title: 'Chance',
         colorGroup: 'chance',
         cost: 0,
@@ -249,6 +263,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 8,
         title: 'Vermont Ave',
         colorGroup: 'light blue',
         cost: 100,
@@ -260,6 +275,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 9,
         title: 'Connecticut Ave',
         colorGroup: 'light blue',
         cost: 120,
@@ -271,6 +287,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 10,
         title: 'Jail/Just Visiting',
         colorGroup: 'corner',
         cost: 0,
@@ -282,6 +299,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 11,
         title: 'St. Charles Place',
         colorGroup: 'pink',
         cost: 140,
@@ -293,6 +311,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 12,
         title: 'Electric Company',
         colorGroup: 'utilities',
         cost: 150,
@@ -304,6 +323,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 13,
         title: 'States Ave',
         colorGroup: 'pink',
         cost: 140,
@@ -315,6 +335,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 14,
         title: 'Virginia Ave',
         colorGroup: 'pink',
         cost: 160,
@@ -326,6 +347,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 15,
         title: 'Pennsylvania Railroad',
         colorGroup: 'railroad',
         cost: 200,
@@ -337,6 +359,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 16,
         title: 'St. James Place',
         colorGroup: 'orange',
         cost: 180,
@@ -348,6 +371,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 17,
         title: 'Community Chest',
         colorGroup: 'community chest',
         cost: 0,
@@ -359,6 +383,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 18,
         title: 'Tennessee Ave',
         colorGroup: 'orange',
         cost: 180,
@@ -370,6 +395,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 19,
         title: 'New York Ave',
         colorGroup: 'orange',
         cost: 200,
@@ -381,6 +407,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 20,
         title: 'Free Parking',
         colorGroup: 'corner',
         cost: 0,
@@ -392,6 +419,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 21,
         title: 'Kentucky Ave',
         colorGroup: 'red',
         cost: 220,
@@ -403,6 +431,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 22,
         title: 'Chance',
         colorGroup: 'chance',
         cost: 0,
@@ -414,6 +443,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 23,
         title: 'Indiana Ave',
         colorGroup: 'red',
         cost: 220,
@@ -425,6 +455,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 24,
         title: 'Illinois Ave',
         colorGroup: 'red',
         cost: 240,
@@ -436,6 +467,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 25,
         title: 'B & O Railroad',
         colorGroup: 'railroad',
         cost: 200,
@@ -447,6 +479,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 26,
         title: 'Atlantic Ave',
         colorGroup: 'yellow',
         cost: 260,
@@ -458,6 +491,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 27,
         title: 'Ventnor Ave',
         colorGroup: 'yellow',
         cost: 260,
@@ -469,6 +503,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 28,
         title: 'Water Works',
         colorGroup: 'utilities',
         cost: 150,
@@ -480,6 +515,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 29,
         title: 'Marvin Gardens',
         colorGroup: 'yellow',
         cost: 280,
@@ -491,6 +527,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 30,
         title: 'Go To Jail',
         colorGroup: 'corner',
         cost: 0,
@@ -502,6 +539,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 31,
         title: 'Pacific Ave',
         colorGroup: 'green',
         cost: 300,
@@ -513,6 +551,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 32,
         title: 'North Carolina Ave',
         colorGroup: 'green',
         cost: 300,
@@ -524,6 +563,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 33,
         title: 'Community Chest',
         colorGroup: 'community chest',
         cost: 0,
@@ -535,6 +575,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 34,
         title: 'Pennsylvania Ave',
         colorGroup: 'green',
         cost: 320,
@@ -546,6 +587,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 35,
         title: 'Short Line Railroad',
         colorGroup: 'railroad',
         cost: 200,
@@ -557,6 +599,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 36,
         title: 'Chance',
         colorGroup: 'chance',
         cost: 0,
@@ -568,6 +611,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 37,
         title: 'Park Place',
         colorGroup: 'blue',
         cost: 350,
@@ -579,6 +623,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 38,
         title: 'Luxury Tax',
         colorGroup: 'tax',
         cost: 0,
@@ -590,6 +635,7 @@ class App extends Component {
         isMortgaged: false
       },
       {
+        id: 39,
         title: 'Boardwalk',
         colorGroup: 'blue',
         cost: 400,
@@ -893,13 +939,54 @@ class App extends Component {
   //roll function - still needs kinks worked out (eventually to move player(s))
   handleClickRoll = () => {
 
-    const die1 = Math.floor((Math.random() * ((6-1)+1) + 1));
-    const die2 = Math.floor((Math.random() * ((6-1)+1) + 1));
+    const firstRoll = Math.floor((Math.random() * ((6-1)+1) + 1));
+    const secondRoll = Math.floor((Math.random() * ((6-1)+1) + 1));
 
-    const roll = die1 + die2;
+    const rollTotal = firstRoll + secondRoll;
 
-    window.alert("Die1: " + die1 + ", Die2: " + die2 + ". Total Roll: " + roll);
+    var doubles = this.state.doublesCounter;
+
+    if (firstRoll === secondRoll) {
+      doubles = doubles + 1;
+    }
+
+    //const newPlayerList = this.state.playerList;
+
+    //const moveToIndex = this.getNewLocation(rollTotal, this.state.playerList[0].currentLocation, this.state.propertyList);
+
+    //newPlayerList[0].currentLocation = this.state.propertyList[moveToIndex].title;
+
+    console.log("Roll 1: " + firstRoll);
+    console.log("Roll 2: " + secondRoll);
+    console.log("Roll Total: " + rollTotal);
+    //console.log("New Location: " + newPlayerList[0].currentLocation);
+
+    this.setState({
+      die1: firstRoll,
+      die2: secondRoll,
+      rollTotal: rollTotal,
+      doublesCounter: doubles,
+      //playerList: newPlayerList
+    });
+
+    this.endRoll();
   };
+
+  /*getNewLocation(roll, currentLoc, boardArr) {
+    const prevLoc = currentLoc;
+    const locIndex = boardArr.indexOf(prevLoc) + 1;
+    const newLocIndex = locIndex + roll;
+
+    return newLocIndex;
+  };*/
+
+  endRoll() {
+    this.setState({
+      die1: '',
+      die2: '',
+      rollTotal: '',
+    });
+  }
 
   render() {
     return (
@@ -918,7 +1005,7 @@ class App extends Component {
                   <Typography variant="headline">Players</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
-                  <ListPlayers PlayerList={this.state.playerList} />
+                  <ListPlayers PlayerList={this.state.playerList} BoardArr={this.state.propertyList} />
                 </ExpansionPanelDetails>
                 <Button variant="outlined" onClick={this.handleClickOpen} style={{ marginBottom: '5%' }}>Add Player</Button>
               </ExpansionPanel>
@@ -958,6 +1045,10 @@ class App extends Component {
             <div />
           }
         </div>
+        {console.log("Die1: " + this.state.die1)}
+        {console.log("Die2: " + this.state.die2)}
+        {console.log("Total: " + this.state.rollTotal)}
+        {console.log("Doubles Count: " + this.state.doublesCounter)}
         </div>
     );
   }
